@@ -18,35 +18,35 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); padding: 20px; max-width: 1280px; margin: 0 auto; }
+        body { background-color: var(--bg-color); color: var(--text-color); padding: 20px; max-width: 1300px; margin: 0 auto; }
 
-        /* 頂部 Header 與回合控制（放大版） */
+        /* 頂部 Header 與回合控制（極大化視線強化版） */
         header {
             background-color: var(--primary-color);
             color: white;
-            padding: 20px 28px;
-            border-radius: 14px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            margin-bottom: 20px;
+            padding: 24px 32px;
+            border-radius: 16px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+            margin-bottom: 24px;
         }
         .header-top {
-            display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 12px; margin-bottom: 12px;
+            display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid rgba(255,255,255,0.25); padding-bottom: 16px; margin-bottom: 16px;
         }
-        .turn-display { font-size: 2.2rem; font-weight: 800; letter-spacing: 1px; color: #fde047; }
-        .turn-controls { display: flex; align-items: center; gap: 12px; }
+        .turn-display { font-size: 2.8rem; font-weight: 900; letter-spacing: 2px; color: #fde047; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        .turn-controls { display: flex; align-items: center; gap: 16px; }
 
-        /* 頂部股票與結算快訊看板 */
+        /* 頂部股票與結算快訊看板 (極大字體) */
         .header-dashboard {
-            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; background-color: rgba(255,255,255,0.1); padding: 12px 16px; border-radius: 8px;
+            display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 20px; background-color: rgba(255,255,255,0.12); padding: 16px 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);
         }
-        .dash-card { text-align: center; border-right: 1px solid rgba(255,255,255,0.2); }
+        .dash-card { text-align: center; border-right: 2px solid rgba(255,255,255,0.2); padding: 0 10px; }
         .dash-card:last-child { border-right: none; }
-        .dash-title { font-size: 0.85rem; color: #cbd5e1; font-weight: 600; }
-        .dash-price { font-size: 1.4rem; font-weight: bold; margin: 2px 0; }
-        .dash-notice { font-size: 0.85rem; color: #fef08a; font-weight: bold; }
+        .dash-title { font-size: 1rem; color: #e2e8f0; font-weight: 700; letter-spacing: 0.5px; }
+        .dash-price { font-size: 2.2rem; font-weight: 900; margin: 4px 0; color: #ffffff; text-shadow: 0 1px 3px rgba(0,0,0,0.4); }
+        .dash-notice { font-size: 0.95rem; color: #fef08a; font-weight: bold; line-height: 1.4; text-align: left; }
 
         button {
-            cursor: pointer; padding: 8px 16px; border: none; border-radius: 6px; font-weight: bold;
+            cursor: pointer; padding: 10px 20px; border: none; border-radius: 8px; font-weight: bold;
             transition: background-color 0.2s, transform 0.1s;
         }
         button:active { transform: scale(0.98); }
@@ -63,13 +63,13 @@
         .full-width { grid-column: 1 / -1; }
 
         .form-group { margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
-        .form-group label { font-size: 0.88rem; font-weight: 600; width: 140px; }
+        .form-group label { font-size: 0.88rem; font-weight: 600; width: 150px; }
         input[type="number"], input[type="text"], select { padding: 6px 10px; border: 1px solid var(--border-color); border-radius: 6px; flex: 1; }
 
         /* 價格與數字放大 */
         .big-price { font-size: 1.8rem; font-weight: bold; color: var(--primary-color); }
-        .price-change-up { font-size: 1.1rem; font-weight: bold; color: var(--stock-up); }
-        .price-change-down { font-size: 1.1rem; font-weight: bold; color: var(--stock-down); }
+        .price-change-up { font-size: 1.2rem; font-weight: bold; color: var(--stock-up); }
+        .price-change-down { font-size: 1.2rem; font-weight: bold; color: var(--stock-down); }
 
         /* 垂直歷史列表 */
         .vertical-history-list {
@@ -102,36 +102,36 @@
         }
         .lottery-ball-container { text-align: center; }
         .lottery-ball {
-            width: 60px; height: 60px; border-radius: 50%; background-color: var(--stock-up); color: white; font-size: 2rem; font-weight: bold; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.15); margin-top: 4px;
+            width: 65px; height: 65px; border-radius: 50%; background-color: var(--stock-up); color: white; font-size: 2.2rem; font-weight: bold; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.15); margin-top: 4px;
         }
     </style>
 </head>
 <body>
 
-    <!-- 頂部 Header & 資訊看板 -->
+    <!-- 頂部 Header & 放大版資訊看板 -->
     <header>
         <div class="header-top">
             <div class="turn-display">第 <span id="currentTurn">1</span> 回合</div>
             <div class="turn-controls">
-                <button id="btnNextTurn" class="btn-warning" style="font-size: 1.1rem; padding: 10px 20px;" onclick="requestNextTurn()">進下一回合</button>
-                <button id="btnConfirmTurn" class="btn-danger hidden" style="font-size: 1.1rem; padding: 10px 20px;" onclick="confirmNextTurn()">確定推進？</button>
+                <button id="btnNextTurn" class="btn-warning" style="font-size: 1.2rem; padding: 12px 24px;" onclick="requestNextTurn()">進下一回合</button>
+                <button id="btnConfirmTurn" class="btn-danger hidden" style="font-size: 1.2rem; padding: 12px 24px;" onclick="confirmNextTurn()">確定推進？</button>
             </div>
         </div>
 
         <!-- 雙股價格與當回合收付/配息提醒看板 -->
         <div class="header-dashboard">
             <div class="dash-card">
-                <div class="dash-title">起始股票當前價格</div>
+                <div class="dash-title">【起始股票】當前價格</div>
                 <div class="dash-price" id="dashStock1Price">$1,000</div>
-                <div id="dashStock1Rate" class="price-change-up" style="font-size: 0.9rem;">--</div>
+                <div id="dashStock1Rate" class="price-change-up" style="font-size: 1rem;">--</div>
             </div>
             <div class="dash-card">
-                <div class="dash-title">上市股票當前成交價</div>
+                <div class="dash-title">【上市股票】當前成交價</div>
                 <div class="dash-price" id="dashStock2Price">$0</div>
-                <div style="font-size: 0.85rem; color: #cbd5e1;" id="dashListedStatus">狀態：未上市</div>
+                <div style="font-size: 0.9rem; color: #cbd5e1; font-weight: 600;" id="dashListedStatus">狀態：未上市</div>
             </div>
             <div class="dash-card">
-                <div class="dash-title">本回合政策與收付提醒</div>
+                <div class="dash-title">本回合收付/配息提醒</div>
                 <div class="dash-notice" id="dashReminders">目前無特殊提醒</div>
             </div>
         </div>
@@ -187,7 +187,7 @@
             
             <div class="form-group">
                 <label>手動公告成交價：</label>
-                <input type="number" id="inputTradePrice" placeholder="輸入成交價">
+                <input type="number" id="inputTradePrice" placeholder="輸入成交價" oninput="calcValuation()">
                 <button class="btn-primary" onclick="addTradePrice()">更新</button>
             </div>
             <div style="margin-bottom: 12px;">
@@ -195,19 +195,31 @@
                 <div class="big-price" id="currentTradePriceDisplay">$0</div>
             </div>
 
-            <!-- 公司估值計算器 -->
+            <!-- 公司估值計算器 (改為數量輸入自動相乘) -->
             <div class="calc-box" style="background-color: #f0fdf4; border-color: #bbf7d0;">
                 <div style="font-weight: bold; margin-bottom: 8px; color: #166534;">🏢 公司總資產估值計算器：</div>
-                <div class="form-group"><label>1. 持有股票價值：</label><input type="number" id="valStock" value="0" oninput="calcValuation()"></div>
-                <div class="form-group"><label>2. 股票面額預備：</label><input type="number" id="valPrep" value="15000" oninput="calcValuation()"></div>
-                <div class="form-group"><label>3. 現金持有額：</label><input type="number" id="valCash" value="0" oninput="calcValuation()"></div>
-                <div class="form-group"><label>4. 抵押土地價值：</label><input type="number" id="valLand" value="0" oninput="calcValuation()"></div>
+                
+                <div class="form-group">
+                    <label>1. 自家股票 (張數)：</label>
+                    <input type="number" id="valOwnShares" value="0" min="0" placeholder="自家持股張數" oninput="calcValuation()">
+                    <span style="font-size:0.8rem; color:#666;">(價值: $<span id="valOwnValue">0</span>)</span>
+                </div>
+                
+                <div class="form-group">
+                    <label>2. 市面股票 (張數)：</label>
+                    <input type="number" id="valMarketShares" value="0" min="0" placeholder="起始股票張數" oninput="calcValuation()">
+                    <span style="font-size:0.8rem; color:#666;">(價值: $<span id="valMarketValue">0</span>)</span>
+                </div>
+
+                <div class="form-group"><label>3. 股票面額預備：</label><input type="number" id="valPrep" value="15000" oninput="calcValuation()"></div>
+                <div class="form-group"><label>4. 現金持有額：</label><input type="number" id="valCash" value="0" oninput="calcValuation()"></div>
+                <div class="form-group"><label>5. 抵押土地價值：</label><input type="number" id="valLand" value="0" oninput="calcValuation()"></div>
                 
                 <hr style="margin: 8px 0; border-color: #bbf7d0;">
                 <div class="form-group"><label>發行股票總數量：</label><input type="number" id="valShareCount" value="100" min="1" oninput="calcValuation()"></div>
                 
                 <div style="margin-top: 8px; font-weight: bold;">
-                    <div>公司總資產：$<span id="totalAssetVal">15,000</span></div>
+                    <div>公司總資產估值：$<span id="totalAssetVal">15,000</span></div>
                     <div class="calc-result" style="color: #15803d;">預估每股價值：$<span id="perShareVal">150</span> <span style="font-size:0.8rem; font-weight:normal; color:#555;">(百位四捨五入: $<span id="perShareValRound">200</span>)</span></div>
                 </div>
             </div>
@@ -252,7 +264,7 @@
                 </div>
             </div>
 
-            <!-- 新增紀錄表單 (包含土地租借) -->
+            <!-- 新增紀錄表單 -->
             <div style="background-color: #f8fafc; padding: 12px; border-radius: 8px; margin-bottom: 12px;">
                 <div style="font-weight: bold; margin-bottom: 8px;">新增借貸 / 借券 / 租借項目：</div>
                 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
@@ -294,15 +306,15 @@
             <!-- 開獎顯示區 (左一位/右一位) -->
             <div class="lottery-draw-box">
                 <div class="lottery-ball-container">
-                    <div style="font-size: 0.85rem; color: #78350f; font-weight: bold;">十位數 (左)</div>
+                    <div style="font-size: 0.9rem; color: #78350f; font-weight: bold;">十位數 (左)</div>
                     <div class="lottery-ball" id="drawBall1">-</div>
                 </div>
                 <div class="lottery-ball-container">
-                    <div style="font-size: 0.85rem; color: #78350f; font-weight: bold;">個位數 (右)</div>
+                    <div style="font-size: 0.9rem; color: #78350f; font-weight: bold;">個位數 (右)</div>
                     <div class="lottery-ball" id="drawBall2">-</div>
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 8px; margin-left: 20px;">
-                    <button class="btn-warning" onclick="drawLottery()">🎲 抽號 (開彩)</button>
+                    <button class="btn-warning" style="font-size:1.1rem; padding: 10px 20px;" onclick="drawLottery()">🎲 抽號 (開彩)</button>
                     <button class="btn-danger" onclick="resetLottery()">🔄 重置 (清空下注)</button>
                 </div>
             </div>
@@ -341,16 +353,15 @@
         let stockPrice = 1000;
         let stockHistory = [];
         
-        let isListed = false; // 是否已上市
-        let listedTurn = 0;   // 上市時的回合
+        let isListed = false; 
+        let listedTurn = 0;   
         let latestTradePrice = 0;
         let tradePriceHistory = [];
         let cashHistory = [];
         let records = []; 
 
-        // 愛國獎券狀態
         let lotteryBets = [];
-        let drawnNumberStr = null; // 單一兩位數號碼，如 "05"
+        let drawnNumberStr = null; 
 
         // --- 回合推進 ---
         function requestNextTurn() {
@@ -370,30 +381,28 @@
             calculateStock1Total();
             renderRecords();
             checkDividendNotice();
+            calcValuation(); // 回合更新時自動重新試算持股估值
             updateHeaderDashboard();
         }
 
-        // --- 頂部看板更新 ---
+        // --- 頂部看板更新 (放大) ---
         function updateHeaderDashboard() {
             document.getElementById('dashStock1Price').innerText = `$${stockPrice.toFixed(2)}`;
             
             if (isListed) {
                 document.getElementById('dashStock2Price').innerText = `$${latestTradePrice.toLocaleString()}`;
-                document.getElementById('dashListedStatus').innerText = `已上市 (於第 ${listedTurn} 回合上市)`;
+                document.getElementById('dashListedStatus').innerText = `已上市 (第 ${listedTurn} 回合上市)`;
             } else {
                 document.getElementById('dashStock2Price').innerText = `$0`;
                 document.getElementById('dashListedStatus').innerText = `狀態：未上市`;
             }
 
-            // 彙整當回合收付款與配息提醒
             let notices = [];
             
-            // 上市公司配息提醒 (上市後每 2 回合)
             if (isListed && (currentTurn - listedTurn) % 2 === 0 && (currentTurn - listedTurn) > 0) {
                 notices.push('⚠️ 上市公司滿 2 回合應強制配息');
             }
 
-            // 借貸/租借利息提醒
             const loanRate = parseFloat(document.getElementById('loanRate').value) / 100;
             records.forEach(r => {
                 const elapsed = currentTurn - r.startTurn;
@@ -448,6 +457,7 @@
             if (stockHistory.length > 5) stockHistory.pop();
 
             renderStockHistory();
+            calcValuation(); // 股價波動時同步更新估值計算器
         }
 
         function renderStockHistory() {
@@ -473,7 +483,7 @@
             document.getElementById('calcTotal1').innerText = roundedTotal.toLocaleString();
         }
 
-        // --- 第二部分：上市公司與公司估值計算器 ---
+        // --- 第二部分：上市公司與公司估值計算器 (相乘計算修正) ---
         function toggleIPOStatus() {
             isListed = !isListed;
             const btn = document.getElementById('btnToggleIPO');
@@ -491,17 +501,27 @@
         }
 
         function calcValuation() {
-            const stock = parseFloat(document.getElementById('valStock').value) || 0;
+            // 1. 自家股票價值 = 自家持股張數 * 上市股票成交價
+            const ownShares = parseInt(document.getElementById('valOwnShares').value) || 0;
+            const ownValue = ownShares * latestTradePrice;
+            document.getElementById('valOwnValue').innerText = ownValue.toLocaleString();
+
+            // 2. 市面股票價值 = 起始股票持股張數 * 起始股票當前精確價格
+            const marketShares = parseInt(document.getElementById('valMarketShares').value) || 0;
+            const marketValue = marketShares * stockPrice;
+            document.getElementById('valMarketValue').innerText = Math.round(marketValue).toLocaleString();
+
+            // 3. 其餘資產
             const prep = parseFloat(document.getElementById('valPrep').value) || 0;
             const cash = parseFloat(document.getElementById('valCash').value) || 0;
             const land = parseFloat(document.getElementById('valLand').value) || 0;
             const shareCount = parseInt(document.getElementById('valShareCount').value) || 1;
 
-            const totalAssets = stock + prep + cash + land;
+            const totalAssets = ownValue + marketValue + prep + cash + land;
             const perShare = totalAssets / shareCount;
             const perShareRound = Math.round(perShare / 100) * 100;
 
-            document.getElementById('totalAssetVal').innerText = totalAssets.toLocaleString();
+            document.getElementById('totalAssetVal').innerText = Math.round(totalAssets).toLocaleString();
             document.getElementById('perShareVal').innerText = perShare.toFixed(2);
             document.getElementById('perShareValRound').innerText = perShareRound.toLocaleString();
         }
@@ -518,6 +538,7 @@
 
             renderSimpleHistory('tradePriceHistory', tradePriceHistory, '元');
             document.getElementById('inputTradePrice').value = '';
+            calcValuation();
             updateHeaderDashboard();
         }
 
@@ -659,7 +680,7 @@
             });
         }
 
-        // --- 第四部分：愛國獎券邏輯 (單一兩位數開號) ---
+        // --- 第四部分：愛國獎券邏輯 ---
         function addBet() {
             const playerId = document.getElementById('lotteryPlayerId').value.trim();
             let betNum = document.getElementById('lotteryBetNumber').value.trim();
@@ -700,9 +721,8 @@
                 return;
             }
 
-            // 抽一個從 01 到 99 的數字 (拆成左邊十位數與右邊個位數)
-            const d1 = Math.floor(Math.random() * 10); // 左 (十位)
-            const d2 = Math.floor(Math.random() * 10); // 右 (個位)
+            const d1 = Math.floor(Math.random() * 10);
+            const d2 = Math.floor(Math.random() * 10);
 
             drawnNumberStr = `${d1}${d2}`;
 
@@ -712,7 +732,6 @@
             renderLotteryBets();
         }
 
-        // 單一獎號比對邏輯
         function evaluateBet(betStr, drawStr) {
             if (!drawStr) return { reward: 0, reason: '尚未開獎' };
 
@@ -723,20 +742,16 @@
             const dTen = drawStr[0];
             const dOne = drawStr[1];
 
-            // 1. 完全相同：$5000
             if (betStr === drawStr) {
                 return { reward: 5000, reason: `完全對中兩位數 ${drawStr}` };
             }
-            // 2. 數字相同但前後顛倒：$1000
             if (betReversed === drawStr) {
                 return { reward: 1000, reason: `與獎號 ${drawStr} 前後反轉對中` };
             }
-            // 3. 相同位數數字相同 (十位同或個位同)：$1000
             if (bTen === dTen || bOne === dOne) {
                 const detail = bTen === dTen ? `十位數(${bTen})相同` : `個位數(${bOne})相同`;
                 return { reward: 1000, reason: `對中 ${drawStr} [${detail}]` };
             }
-            // 4. 不同位數數字相同 (十對個 或 個對十)：$500
             if (bTen === dOne || bOne === dTen) {
                 return { reward: 500, reason: `對中 ${drawStr} [異位數相同]` };
             }
@@ -778,7 +793,6 @@
             });
         }
 
-        // 初始化變數與預載
         document.getElementById('loanRate').addEventListener('input', renderRecords);
         document.getElementById('depositRate').addEventListener('input', renderRecords);
         calcValuation();
