@@ -43,6 +43,7 @@
         .btn-primary { background-color: var(--accent-color); color: white; }
         .btn-success { background-color: #16a34a; color: white; }
         .btn-danger { background-color: #dc2626; color: white; }
+        .btn-warning { background-color: var(--warning-color); color: white; }
         .hidden { display: none !important; }
 
         /* 版面 Layout */
@@ -55,7 +56,7 @@
         .form-group label { font-size: 0.9rem; font-weight: 600; width: 140px; }
         input[type="number"], input[type="text"], select { padding: 6px 10px; border: 1px solid var(--border-color); border-radius: 6px; flex: 1; }
 
-        /* 價格大字體 */
+        /* 價格與數字放大 */
         .big-price { font-size: 1.8rem; font-weight: bold; color: var(--primary-color); }
         .price-change-up { font-size: 1.1rem; font-weight: bold; color: var(--stock-up); }
         .price-change-down { font-size: 1.1rem; font-weight: bold; color: var(--stock-down); }
@@ -84,6 +85,14 @@
         .badge-collect { background-color: #fee2e2; color: var(--stock-up); border: 1px solid var(--stock-up); }
         .badge-pay { background-color: #dcfce7; color: var(--stock-down); border: 1px solid var(--stock-down); }
         .badge-fee { background-color: #fef3c7; color: var(--warning-color); }
+
+        /* 愛國獎券樣式 */
+        .lottery-draw-box {
+            display: flex; gap: 20px; justify-content: center; align-items: center; background-color: #fef3c7; padding: 16px; border-radius: 8px; margin-bottom: 16px; border: 1px dashed var(--warning-color);
+        }
+        .lottery-ball {
+            width: 60px; height: 60px; border-radius: 50%; background-color: var(--stock-up); color: white; font-size: 1.8rem; font-weight: bold; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+        }
     </style>
 </head>
 <body>
@@ -107,10 +116,10 @@
                 <input type="number" id="fluctuateInterval" value="2" min="1" style="width: 80px;">
             </div>
             <div class="form-group">
-                <label>漲幅上限 (%)：</label>
-                <input type="number" id="maxUpRate" value="25" min="1" max="100">
-                <label style="width: auto;">跌幅上限 (%)：</label>
-                <input type="number" id="maxDownRate" value="25" min="1" max="100">
+                <label>最高漲幅 (%)：</label>
+                <input type="number" id="maxUpRate" value="25" step="1">
+                <label style="width: auto;">最低跌幅 (%)：</label>
+                <input type="number" id="minDownRate" value="-10" step="1">
             </div>
 
             <hr style="margin: 12px 0; border: none; border-top: 1px solid var(--border-color);">
@@ -233,18 +242,69 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- 第四部分：愛國獎券 -->
+        <div class="card full-width">
+            <div class="card-title">四、愛國獎券 (下注與開獎兌獎)</div>
+            
+            <!-- 開獎顯示區 -->
+            <div class="lottery-draw-box">
+                <div style="text-align: center;">
+                    <div style="font-size: 0.85rem; color: #78350f; font-weight: bold; margin-bottom: 4px;">獎號一</div>
+                    <div class="lottery-ball" id="drawBall1">--</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 0.85rem; color: #78350f; font-weight: bold; margin-bottom: 4px;">獎號二</div>
+                    <div class="lottery-ball" id="drawBall2">--</div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px; margin-left: 20px;">
+                    <button class="btn-warning" onclick="drawLottery()">🎲 抽號 (開獎)</button>
+                    <button class="btn-danger" onclick="resetLottery()">🔄 重置 (清空下注區)</button>
+                </div>
+            </div>
+
+            <!-- 下注區 -->
+            <div style="background-color: #f8fafc; padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                <div style="font-weight: bold; margin-bottom: 8px;">下注登記：</div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <input type="text" id="lotteryPlayerId" placeholder="玩家編號 (如: P1)" style="width: 140px;">
+                    <input type="text" id="lotteryBetNumber" placeholder="號碼 (01 - 99)" maxlength="2" style="width: 140px;">
+                    <button class="btn-primary" onclick="addBet()">+ 新增下注</button>
+                </div>
+            </div>
+
+            <!-- 下注與兌獎結果列表 -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>玩家編號</th>
+                        <th>下注號碼</th>
+                        <th>兌獎結果與說明</th>
+                        <th>應得獎金</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="lotteryTableBody">
+                    <!-- 動態渲染 -->
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script>
         // --- 全局狀態 ---
         let currentTurn = 1;
-        let stockPrice = 1000; // 不四捨五入的原價
-        let stockHistory = []; // 起始股票歷史 [{turn, price, rateText, isUp}]
+        let stockPrice = 1000;
+        let stockHistory = [];
         
         let latestTradePrice = 0;
         let tradePriceHistory = [];
         let cashHistory = [];
         let records = []; 
+
+        // 愛國獎券狀態
+        let lotteryBets = [];
+        let drawnNumbers = null; // [num1, num2]
 
         // --- 回合推進 ---
         function requestNextTurn() {
@@ -256,7 +316,6 @@
             currentTurn++;
             document.getElementById('currentTurn').innerText = currentTurn;
 
-            // 檢查是否符合抽籤回合
             const interval = parseInt(document.getElementById('fluctuateInterval').value) || 1;
             if (currentTurn % interval === 0) {
                 runStockFluctuation();
@@ -268,33 +327,32 @@
             checkDividendNotice();
         }
 
-        // --- 第一部分：起始股票邏輯 ---
+        // --- 第一部分：起始股票邏輯 (改為連續區間平均機率抽籤) ---
         function runStockFluctuation() {
-            const maxUp = parseFloat(document.getElementById('maxUpRate').value) || 10;
-            const maxDown = parseFloat(document.getElementById('maxDownRate').value) || 10;
+            const maxUp = parseFloat(document.getElementById('maxUpRate').value);
+            const minDown = parseFloat(document.getElementById('minDownRate').value);
 
-            // 隨機決定漲還是跌 (不包含 0%)
-            const isUp = Math.random() < 0.5;
-            let percent = 0;
-            if (isUp) {
-                percent = (Math.random() * maxUp) + 0.1; // 確保大於0
-            } else {
-                percent = -((Math.random() * maxDown) + 0.1);
+            if (isNaN(maxUp) || isNaN(minDown) || minDown >= maxUp) {
+                alert('請輸入有效的最高與最低漲跌幅範圍 (最低跌幅必須小於最高漲幅)！');
+                return;
             }
 
-            // 計算精確股價（不四捨五入）
+            // 在 [minDown, maxUp] 區間中均勻隨機抽取 percent 數值
+            let percent = 0;
+            do {
+                percent = Math.random() * (maxUp - minDown) + minDown;
+            } while (Math.abs(percent) < 0.01); // 避免極度接近 0
+
+            // 計算精確股價
             stockPrice = stockPrice * (1 + (percent / 100));
             
-            // 顯示當前精確價格
             document.getElementById('stockPriceDisplay').innerText = `$${stockPrice.toFixed(2)}`;
 
-            // 顯示漲跌幅 (紅加綠減)
             const changeEl = document.getElementById('priceChangeDisplay');
             const rateText = `${percent > 0 ? '+' : ''}${percent.toFixed(2)}%`;
             changeEl.innerText = rateText;
             changeEl.className = percent > 0 ? 'price-change-up' : 'price-change-down';
 
-            // 存入歷史 (紀錄當前回合與數值)
             stockHistory.unshift({
                 turn: currentTurn,
                 price: stockPrice.toFixed(2),
@@ -325,7 +383,6 @@
         function calculateStock1Total() {
             const shares = parseInt(document.getElementById('calcShares1').value) || 0;
             const rawTotal = stockPrice * shares;
-            // 試算金額四捨五入至百位
             const roundedTotal = Math.round(rawTotal / 100) * 100;
             document.getElementById('calcTotal1').innerText = roundedTotal.toLocaleString();
         }
@@ -349,7 +406,6 @@
         function calculateStock2Total() {
             const shares = parseInt(document.getElementById('calcShares2').value) || 0;
             const rawTotal = latestTradePrice * shares;
-            // 試算金額四捨五入至百位
             const roundedTotal = Math.round(rawTotal / 100) * 100;
             document.getElementById('calcTotal2').innerText = roundedTotal.toLocaleString();
         }
@@ -416,7 +472,7 @@
                 type,
                 playerId,
                 amount,
-                startTurn: currentTurn // 紀錄開始的回合數
+                startTurn: currentTurn
             });
 
             document.getElementById('playerId').value = '';
@@ -440,8 +496,6 @@
                 const tr = document.createElement('tr');
                 let statusHtml = '';
                 const elapsedTurns = currentTurn - r.startTurn;
-                
-                // 檢查是否剛好為 4 的倍數回合 (且大於 0 回合)
                 const isSettlementTurn = (elapsedTurns > 0 && elapsedTurns % 4 === 0);
 
                 if (r.type === '借款') {
@@ -475,6 +529,147 @@
             });
         }
 
+        // --- 第四部分：愛國獎券邏輯 ---
+        function addBet() {
+            const playerId = document.getElementById('lotteryPlayerId').value.trim();
+            let betNum = document.getElementById('lotteryBetNumber').value.trim();
+
+            if (!playerId || !betNum || isNaN(betNum)) {
+                alert('請輸入有效的玩家編號與號碼！');
+                return;
+            }
+
+            // 自動補零為雙位數 (例: 5 -> 05)
+            const numInt = parseInt(betNum);
+            if (numInt < 1 || numInt > 99) {
+                alert('請輸入 01 到 99 之間的數字！');
+                return;
+            }
+            betNum = numInt < 10 ? '0' + numInt : '' + numInt;
+
+            lotteryBets.push({
+                id: Date.now(),
+                playerId,
+                number: betNum
+            });
+
+            document.getElementById('lotteryBetNumber').value = '';
+            renderLotteryBets();
+        }
+
+        function resetLottery() {
+            lotteryBets = [];
+            drawnNumbers = null;
+            document.getElementById('drawBall1').innerText = '--';
+            document.getElementById('drawBall2').innerText = '--';
+            renderLotteryBets();
+        }
+
+        function drawLottery() {
+            if (lotteryBets.length === 0) {
+                alert('目前沒有玩家下注！');
+                return;
+            }
+
+            // 抽兩個從 01 到 99 的數字
+            const n1 = Math.floor(Math.random() * 99) + 1;
+            let n2 = Math.floor(Math.random() * 99) + 1;
+            
+            const num1Str = n1 < 10 ? '0' + n1 : '' + n1;
+            const num2Str = n2 < 10 ? '0' + n2 : '' + n2;
+
+            drawnNumbers = [num1Str, num2Str];
+
+            document.getElementById('drawBall1').innerText = num1Str;
+            document.getElementById('drawBall2').innerText = num2Str;
+
+            renderLotteryBets();
+        }
+
+        // 規則評估函式 (比對單個下注號碼與兩個開獎號碼)
+        function evaluateBet(betStr, drawnArr) {
+            if (!drawnArr) return { reward: 0, reason: '尚未開獎' };
+
+            let maxReward = 0;
+            let bestReason = '未中獎';
+
+            const bTen = betStr[0];
+            const bOne = betStr[1];
+            const betReversed = bOne + bTen;
+
+            drawnArr.forEach(drawStr => {
+                const dTen = drawStr[0];
+                const dOne = drawStr[1];
+
+                // 1. 完全相同：$5000
+                if (betStr === drawStr) {
+                    if (5000 > maxReward) {
+                        maxReward = 5000;
+                        bestReason = `完全對中號碼 ${drawStr}`;
+                    }
+                }
+                // 2. 兩位數字相同但反過來：$1000
+                else if (betReversed === drawStr) {
+                    if (1000 > maxReward) {
+                        maxReward = 1000;
+                        bestReason = `與號碼 ${drawStr} 前後反轉對中`;
+                    }
+                }
+                // 3. 相同位數數字相同 (十位同或個位同)：$1000
+                else if (bTen === dTen || bOne === dOne) {
+                    if (1000 > maxReward) {
+                        maxReward = 1000;
+                        const matchDetail = bTen === dTen ? `十位數(${bTen})相同` : `個位數(${bOne})相同`;
+                        bestReason = `對中 ${drawStr} [${matchDetail}]`;
+                    }
+                }
+                // 4. 不同位數數字相同 (十對個 或 個對十)：$500
+                else if (bTen === dOne || bOne === dTen) {
+                    if (500 > maxReward) {
+                        maxReward = 500;
+                        bestReason = `對中 ${drawStr} [異位數相同]`;
+                    }
+                }
+            });
+
+            return { reward: maxReward, reason: bestReason };
+        }
+
+        function deleteBet(id) {
+            lotteryBets = lotteryBets.filter(b => b.id !== id);
+            renderLotteryBets();
+        }
+
+        function renderLotteryBets() {
+            const tbody = document.getElementById('lotteryTableBody');
+            tbody.innerHTML = '';
+
+            if (lotteryBets.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#888;">下注區為空</td></tr>';
+                return;
+            }
+
+            lotteryBets.forEach(b => {
+                const tr = document.createElement('tr');
+                const result = evaluateBet(b.number, drawnNumbers);
+
+                let rewardStyle = 'color: #666;';
+                if (result.reward > 0) {
+                    rewardStyle = 'color: var(--stock-up); font-weight: bold; font-size: 1rem;';
+                }
+
+                tr.innerHTML = `
+                    <td><strong>${b.playerId}</strong></td>
+                    <td><span style="background:#eff6ff; padding: 2px 8px; border-radius:4px; font-weight:bold; color:var(--accent-color);">${b.number}</span></td>
+                    <td>${result.reason}</td>
+                    <td><span style="${rewardStyle}">$${result.reward.toLocaleString()}</span></td>
+                    <td><button class="btn-danger" style="padding: 4px 8px; font-size: 0.8rem;" onclick="deleteBet(${b.id})">刪除</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // 初始化變數監聽
         document.getElementById('loanRate').addEventListener('input', renderRecords);
         document.getElementById('depositRate').addEventListener('input', renderRecords);
     </script>
